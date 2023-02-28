@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="0XW-ca-JKW">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--NDI Rp Sample -->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController title="NDI Rp Sample " id="BYZ-38-t0r" customClass="ViewController" customModule="sample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC" customClass="SampleView" customModule="sample" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ncZ-tx-1V1">
+                                <rect key="frame" x="0.0" y="103" width="393" height="715"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="gxd-lw-DKr">
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="311.33333333333331"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap on button to start login with SPM" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xMY-sm-IPQ">
+                                                <rect key="frame" x="0.0" y="0.0" width="393" height="20.333333333333332"/>
+                                                <directionalEdgeInsets key="directionalLayoutMargins" top="8" leading="24" bottom="8" trailing="24"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" name="colorOnBackground"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wu6-Cz-F29">
+                                                <rect key="frame" x="0.0" y="40.333333333333336" width="393" height="85.333333333333314"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hdZ-uM-p4y">
+                                                        <rect key="frame" x="82.666666666666686" y="18.666666666666657" width="228" height="48"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" secondItem="hdZ-uM-p4y" secondAttribute="height" multiplier="19:4" id="TN7-nU-lTQ"/>
+                                                        </constraints>
+                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                        <state key="normal" backgroundImage="singpassLoginButton"/>
+                                                    </button>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="hdZ-uM-p4y" firstAttribute="centerY" secondItem="Wu6-Cz-F29" secondAttribute="centerY" id="MXe-JM-kql"/>
+                                                    <constraint firstItem="hdZ-uM-p4y" firstAttribute="centerX" secondItem="Wu6-Cz-F29" secondAttribute="centerX" id="NhS-Ro-l2r"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kO4-9R-Ggx">
+                                                <rect key="frame" x="0.0" y="145.66666666666666" width="393" height="85"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DSo-ha-Eaw">
+                                                        <rect key="frame" x="112.66666666666669" y="12.333333333333343" width="168" height="60"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" secondItem="DSo-ha-Eaw" secondAttribute="height" multiplier="14:5" id="Jf6-3e-JKJ"/>
+                                                        </constraints>
+                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                        <state key="normal" backgroundImage="myinfo"/>
+                                                    </button>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="DSo-ha-Eaw" firstAttribute="centerX" secondItem="kO4-9R-Ggx" secondAttribute="centerX" id="a5W-RU-J8Z"/>
+                                                    <constraint firstItem="DSo-ha-Eaw" firstAttribute="centerY" secondItem="kO4-9R-Ggx" secondAttribute="centerY" id="tNk-xZ-Xbm"/>
+                                                </constraints>
+                                            </view>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No authCode obtained yet!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wsi-yY-QTx">
+                                                <rect key="frame" x="0.0" y="250.66666666666671" width="393" height="20.333333333333343"/>
+                                                <directionalEdgeInsets key="directionalLayoutMargins" top="8" leading="24" bottom="8" trailing="24"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" name="colorOnBackground"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No idToken obtained yet!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sbp-sx-vdt">
+                                                <rect key="frame" x="0.0" y="291" width="393" height="20.333333333333314"/>
+                                                <directionalEdgeInsets key="directionalLayoutMargins" top="8" leading="24" bottom="8" trailing="24"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" name="colorOnBackground"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="gxd-lw-DKr" secondAttribute="bottom" id="DrU-Cm-EDd"/>
+                                    <constraint firstAttribute="trailing" secondItem="gxd-lw-DKr" secondAttribute="trailing" id="INX-P3-MC4"/>
+                                    <constraint firstAttribute="width" secondItem="gxd-lw-DKr" secondAttribute="width" id="qMq-GJ-egu"/>
+                                    <constraint firstItem="gxd-lw-DKr" firstAttribute="top" secondItem="ncZ-tx-1V1" secondAttribute="top" id="wAv-61-9OA"/>
+                                    <constraint firstItem="gxd-lw-DKr" firstAttribute="leading" secondItem="ncZ-tx-1V1" secondAttribute="leading" id="xkb-wY-cCb"/>
+                                </constraints>
+                                <viewLayoutGuide key="contentLayoutGuide" id="YJL-0k-QFu"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="ixB-ke-Xzh"/>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" name="colorBackground"/>
+                        <constraints>
+                            <constraint firstItem="ncZ-tx-1V1" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="4Yt-hI-fUw"/>
+                            <constraint firstItem="ncZ-tx-1V1" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="9j4-hW-k1h"/>
+                            <constraint firstItem="ncZ-tx-1V1" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="F3e-b0-EG7"/>
+                            <constraint firstItem="kO4-9R-Ggx" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.1" id="ImB-XH-Whc"/>
+                            <constraint firstItem="ncZ-tx-1V1" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="ljv-BK-fPH"/>
+                            <constraint firstItem="Wu6-Cz-F29" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.1" id="pGQ-9q-tjP"/>
+                        </constraints>
+                        <connections>
+                            <outlet property="authCodeLabel" destination="Wsi-yY-QTx" id="Eq0-hg-fM6"/>
+                            <outlet property="loginButton" destination="hdZ-uM-p4y" id="hdv-iK-Q9j"/>
+                            <outlet property="myinfoButton" destination="DSo-ha-Eaw" id="DEy-n5-tjO"/>
+                            <outlet property="responseLabel" destination="sbp-sx-vdt" id="NM4-az-q2r"/>
+                            <outlet property="titleLabel" destination="xMY-sm-IPQ" id="Svo-QX-UVv"/>
+                        </connections>
+                    </view>
+                    <navigationItem key="navigationItem" id="jD5-Me-FD6">
+                        <barButtonItem key="rightBarButtonItem" image="trash" catalog="system" id="6te-sd-TN7">
+                            <connections>
+                                <action selector="trashClicked:" destination="BYZ-38-t0r" id="ra0-Wv-O68"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="sampleView" destination="8bC-Xf-vdC" id="eDI-k9-U4w"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1031.2977099236641" y="4.9295774647887329"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="8yf-Mm-7g0">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="0XW-ca-JKW" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="cAc-sL-Hbp">
+                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="vCz-09-iGT"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XF8-wq-Kpd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="107.63358778625954" y="4.9295774647887329"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="myinfo" width="168" height="60"/>
+        <image name="singpassLoginButton" width="228" height="48"/>
+        <image name="trash" catalog="system" width="117" height="128"/>
+        <namedColor name="colorBackground">
+            <color red="0.95686274509803926" green="0.95686274509803926" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="colorOnBackground">
+            <color red="0.078431372549019607" green="0.078431372549019607" blue="0.078431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>
