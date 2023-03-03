@@ -15,6 +15,10 @@ This repository has codes for a sample iOS application implementing the recommen
 # Sequence Diagram
 ![Sequence Diagram](pkce_sequence_diagram.png)
 
+<br>
+
+*RP stands for **Relying Party**
+
 - 1a) Call **RP Backend** to obtain backend generate `code_challenge`, `code_challenge_method` along with `state` and `nonce` if required. #
 <br><br>
 - 1b) **RP Backend** responds with the requested parameters. (`code_challenge`, `code_challenge_method`, `state`, `nonce`) #
@@ -52,10 +56,10 @@ This repository has codes for a sample iOS application implementing the recommen
 - Please use the query param `app_launch_url` when opening the authorization endpoint webpage for iOS to enable Singpass App to return to RP mobile app automatically.
   <br><br>
 - Recommended to **NOT** use `redirect_uri` with a `https` scheme e.g. https://rp.redirectUri/callback due to potential UX issues when redirecting back to **RP Mobile App** from the external web browser. Use iOS URL scheme instead as the redirect_uri. e.g. sg.gov.singpass.app://ndisample.gov.sg/rp/sample
+  <br><br>
+- The sample mobile appplication code in this repository receives the token endpoint response from the RP Backend, RPs should **NOT** do this, **RP Backend** should the token response and do your appropriate processing.
 
 # Implementation Details
-
----
 
 ## Required dependencies
 
