@@ -57,7 +57,7 @@ This repository has codes for a sample iOS application implementing the recommen
   <br><br>
 - Recommended to **NOT** use `redirect_uri` with a `https` scheme e.g. https://rp.redirectUri/callback due to potential UX issues when redirecting back to **RP Mobile App** from the external web browser. Use iOS URL scheme instead as the redirect_uri. e.g. sg.gov.singpass.app://ndisample.gov.sg/rp/sample
   <br><br>
-- The sample mobile appplication code in this repository receives the token endpoint response from the RP Backend, RPs should **NOT** do this, **RP Backend** should the token response and do your appropriate processing.
+- The sample mobile appplication code in this repository receives the token endpoint response from the RP Backend, RPs should **NOT** do this, **RP Backend** should get the token response and do your appropriate processing.
 
 # Implementation Details
 
