@@ -45,7 +45,7 @@ class ViewController: UIViewController {
 		if myInfo {
 			return "STG2-MYINFO-SELF-TEST"
 		} else {
-			return "xKdfiRj368NJ2F0OVlBjdjBBYdEc46gp"
+			return "ikivDlY5OlOHQVKb8ZIKd4LSpr3nkKsK"
 		}
 	}
 	
@@ -73,7 +73,7 @@ class ViewController: UIViewController {
 	let kAppAuthExampleAuthStateKey: String = "authState"
 	
 	let appLaunchURL: String = "app_launch_url"
-	let appLinkURL: String = "ndisample://ndisample.gov.sg/rp/sample"
+	let appLinkURL: String = "sg.gov.singpass.app"
 	
 	private var authState: OIDAuthState?
 	
