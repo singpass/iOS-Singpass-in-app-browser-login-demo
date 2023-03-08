@@ -167,6 +167,6 @@ OIDAuthorizationService.present(request, presenting: self) { (response, error) i
 
 ## Demo Video/s
 
-| MyInfo Mockpass Demo                                                 |
-|------------------------------------------------------------------------------------------------------------------|
-| <img src="myinfo_pkce.gif" alt="Myinfo Mockpass flow video" width="300px" height="600px"></img> |
+| MyInfo Mockpass Demo | Singpass Demo |
+|---|---|
+| <img src="myinfo_pkce.gif" alt="Myinfo Mockpass flow video" width="300px" height="600px"></img> |  <img src="singpass_pkce.gif" alt="Singpass flow video" width="300px" height="600px"></img> |
