@@ -163,7 +163,15 @@ OIDAuthorizationService.present(request, presenting: self) { (response, error) i
     }
 }
 ```
+
+## Permissions
+Include camera permission in **info.plist** to allow Singpass Face Verification(SFV)
+```
+<key>NSCameraUsageDescription</key>
+<string>To enable face verification</string>
+```
 <br>
+
 
 ## Demo Video/s
 
