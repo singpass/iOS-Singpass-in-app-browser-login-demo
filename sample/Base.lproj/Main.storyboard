@@ -21,20 +21,20 @@
                                 <rect key="frame" x="0.0" y="103" width="393" height="715"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="gxd-lw-DKr">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="311.33333333333331"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="327.33333333333331"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap on button to start login with SPM" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xMY-sm-IPQ">
-                                                <rect key="frame" x="0.0" y="0.0" width="393" height="20.333333333333332"/>
+                                                <rect key="frame" x="24" y="7.9999999999999982" width="345" height="20.333333333333329"/>
                                                 <directionalEdgeInsets key="directionalLayoutMargins" top="8" leading="24" bottom="8" trailing="24"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" name="colorOnBackground"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wu6-Cz-F29">
-                                                <rect key="frame" x="0.0" y="40.333333333333336" width="393" height="85.333333333333314"/>
+                                                <rect key="frame" x="24" y="48.333333333333336" width="345" height="85.333333333333314"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hdZ-uM-p4y">
-                                                        <rect key="frame" x="82.666666666666686" y="18.666666666666657" width="228" height="48"/>
+                                                        <rect key="frame" x="58.666666666666686" y="18.666666666666657" width="228" height="48"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="hdZ-uM-p4y" secondAttribute="height" multiplier="19:4" id="TN7-nU-lTQ"/>
                                                         </constraints>
@@ -48,10 +48,10 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kO4-9R-Ggx">
-                                                <rect key="frame" x="0.0" y="145.66666666666666" width="393" height="85"/>
+                                                <rect key="frame" x="24" y="153.66666666666669" width="345" height="85"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DSo-ha-Eaw">
-                                                        <rect key="frame" x="112.66666666666669" y="12.333333333333343" width="168" height="60"/>
+                                                        <rect key="frame" x="88.666666666666686" y="12.333333333333314" width="168" height="60"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="DSo-ha-Eaw" secondAttribute="height" multiplier="14:5" id="Jf6-3e-JKJ"/>
                                                         </constraints>
@@ -65,20 +65,20 @@
                                                 </constraints>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No authCode obtained yet!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wsi-yY-QTx">
-                                                <rect key="frame" x="0.0" y="250.66666666666671" width="393" height="20.333333333333343"/>
+                                                <rect key="frame" x="24" y="258.66666666666669" width="345" height="20.333333333333314"/>
                                                 <directionalEdgeInsets key="directionalLayoutMargins" top="8" leading="24" bottom="8" trailing="24"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" name="colorOnBackground"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No idToken obtained yet!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sbp-sx-vdt">
-                                                <rect key="frame" x="0.0" y="291" width="393" height="20.333333333333314"/>
-                                                <directionalEdgeInsets key="directionalLayoutMargins" top="8" leading="24" bottom="8" trailing="24"/>
+                                                <rect key="frame" x="24" y="299" width="345" height="20.333333333333314"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" name="colorOnBackground"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
+                                        <directionalEdgeInsets key="directionalLayoutMargins" top="8" leading="24" bottom="8" trailing="24"/>
                                     </stackView>
                                 </subviews>
                                 <constraints>
@@ -147,7 +147,7 @@
     <resources>
         <image name="myinfo" width="168" height="60"/>
         <image name="singpassLoginButton" width="228" height="48"/>
-        <image name="trash" catalog="system" width="117" height="128"/>
+        <image name="trash" catalog="system" width="32" height="32"/>
         <namedColor name="colorBackground">
             <color red="0.95686274509803926" green="0.95686274509803926" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

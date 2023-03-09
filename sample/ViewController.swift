@@ -106,13 +106,18 @@ extension ViewController {
 	///	1a) Call RP Backend to generate PKCE code
 	///	1b) RP Backend responds with requested parameters. (code_challenge, code_challenge_method, state, nonce)
 	func getPKCECode() {
+		guard !generatePKCECodeChallenge.isEmpty else {
+			self.log("Error: generatePKCECodeChallenge is not set", label: 0)
+			return
+		}
+		
 		guard let randomBytes = generateRandomBytes() else {
-			printd("Error generating session verifier for : \(generatePKCECodeChallenge)")
+			self.log("Error: failed to generate session verifier for \(generatePKCECodeChallenge)", label: 0)
 			return
 		}
 		printd("The session verifier is : \(String(describing: sessionVerifier))")
 		guard let sessionChallenge = randomBytes.sha256() else {
-			printd("Error generating session challenge for : \(generatePKCECodeChallenge)")
+			self.log("Error: failed to generate session challenge for \(generatePKCECodeChallenge)", label: 0)
 			return
 		}
 		self.sessionChallenge = sessionChallenge
@@ -128,7 +133,7 @@ extension ViewController {
 		}
 		
 		guard let url = URL(string: urlString) else {
-			printd("Error creating URL for : \(urlString)")
+			self.log("Error: failed to create URL for requesting PKCE parameters \(generatePKCECodeChallenge)", label: 0)
 			return
 		}
 		
@@ -136,12 +141,12 @@ extension ViewController {
 		request.httpMethod = "GET"
 		request.setValue("no-cache", forHTTPHeaderField: "Cache-Control")
 		
-		printd("Generating code challenge for auth code: \(url)")
+		self.log("Generating code challenge for auth code: \(url)", label: 0)
 		
 		sampleView.setAuthCode("Getting PKCE params...")
 		let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
 			guard let data = data, let encodedData = String(data: data, encoding: .utf8) else {
-				printd("Failed to get any data")
+				self.log("Failed to get any data", label: 0)
 				return
 			}
 			printd("The response is : \(encodedData)")
@@ -166,24 +171,24 @@ extension ViewController {
 		printd("Constructing configuration for issuer: \(String(describing: serviceConfigEndpoints["issuer"]))")
 		
 		guard let authEndpoint = serviceConfigEndpoints["authorizationEndpoint"], let authURL = URL(string: authEndpoint) else {
-			printd("Failed to construct configuration as authorizationEndpoint is not set")
+			self.log("Failed to construct configuration as authorizationEndpoint is not set", label: 0)
 			return
 		}
 		
 		guard let tokenEndpoint = serviceConfigEndpoints["tokenEndpoint"], let tokenURL = URL(string: tokenEndpoint) else {
-			printd("Failed to construct configuration as tokenEndpoint is not set")
+			self.log("Failed to construct configuration as tokenEndpoint is not set", label: 0)
 			return
 		}
 		
 		guard let issuerEndpoint = serviceConfigEndpoints["issuer"], let issuerURL = URL(string: issuerEndpoint) else {
-			printd("Failed to construct configuration as issuer is not set")
+			self.log("Failed to construct configuration as issuer is not set", label: 0)
 			return
 		}
 		
 		let configuration = OIDServiceConfiguration(authorizationEndpoint: authURL, tokenEndpoint: tokenURL, issuer: issuerURL)
 		
 		guard let clientId = kClientID else {
-			printd("Failed to construct configuration as kClientID is not set")
+			self.log("Failed to construct configuration as kClientID is not set", label: 0)
 			return
 		}
 		
@@ -192,26 +197,26 @@ extension ViewController {
 		}
 	}
 	
-	///	3b) Sends authorization code back to RP backend
+	///	3a) Sends authorization code back to RP backend
 	func postAuthCode(nonce: String? = nil, state: String? = nil) {
 		guard let url = URL(string: authCodeEndpoint) else {
-			printd("Error creating URL for : \(authCodeEndpoint)")
+			self.log("Error: failed to create URL for authCodeEndpoint \(authCodeEndpoint)", label: 1)
 			return
 		}
 		
 		guard let tokenExchangeRequest = self.authState?.lastAuthorizationResponse.tokenExchangeRequest(), let authCode = tokenExchangeRequest.authorizationCode else {
-			printd("Error creating authorization code exchange request for : \(url)")
+			self.log("Error: failed to create authorization code exchange request for \(url)", label: 1)
 			return
 		}
 		
 		guard let session_id else {
-			printd("No session_id for : \(url)")
+			self.log("No session_id for : \(url)", label: 1)
 			printd("Ending request.")
 			return
 		}
 		
 		guard let sessionVerifier else {
-			printd("No session verifier for : \(url)")
+			self.log("No session verifier for : \(url)", label: 1)
 			printd("Ending request.")
 			return
 		}
@@ -239,13 +244,10 @@ extension ViewController {
 		sampleView.setResponse("Sending authCode back to backend and waiting for response...")
 		let task = URLSession.shared.dataTask(with: request) {(data, response, error) in
 			guard let data = data, let encodedData = String(data: data, encoding: .utf8) else {
-				printd("Failed to get any data")
+				self.log("Failed to get any data", label: 1)
 				return
 			}
-			printd("The response is : \(encodedData)")
-			DispatchQueue.main.async {
-				self.sampleView.setResponse("Access Token: \(encodedData)")
-			}
+			self.log("Access Token: \(encodedData)", label: 1)
 		}
 		task.resume()
 	}
@@ -256,12 +258,12 @@ extension ViewController {
 	
 	func doAuthWithoutCodeExchange(configuration: OIDServiceConfiguration, clientID: String, clientSecret: String?) {
 		guard let redirectURI = URL(string: kRedirectURI) else {
-			printd("Error creating URL for : \(kRedirectURI)")
+			self.log("Error: failed to create URL for kRedirectURI \(kRedirectURI)", label: 0)
 			return
 		}
 		
 		guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-			printd("Error accessing AppDelegate")
+			self.log("Error accessing AppDelegate", label: 0)
 			return
 		}
 		
@@ -306,13 +308,11 @@ extension ViewController {
 		sampleView.setAuthCode("Waiting for authCode...")
 		appDelegate.currentAuthorizationFlow = OIDAuthorizationService.present(request, presenting: self) { (response, error) in
 			
-			if let response = response {
+			if let response {
 				let authState = OIDAuthState(authorizationResponse: response)
 				self.setAuthState(authState)
 				
-				printd("Authorization response with code: \(response.authorizationCode ?? "no code returned")")
-				
-				self.sampleView.setAuthCode("AuthCode: \(response.authorizationCode ?? "no code returned")")
+				self.log("AuthCode: \(response.authorizationCode ?? "no code returned")", label: 0)
 				
 				if self.myInfo {
 					self.postAuthCode()
@@ -320,7 +320,7 @@ extension ViewController {
 					self.postAuthCode(nonce: request.nonce, state: request.state)
 				}
 			} else {
-				printd("Authorization error: \(error?.localizedDescription ?? "DEFAULT_ERROR")")
+				self.log("Error: \(error?.localizedDescription ?? "Failed to get authorization code")", label: 0)
 			}
 		}
 	}
@@ -376,6 +376,18 @@ extension ViewController: LoginButtonDelegate {
 
 //MARK: Helper Methods
 extension ViewController {
+	
+	func log(_ string: String, label: Int) {
+		printd(string)
+		DispatchQueue.main.async { [weak self] in
+			guard let self else { return }
+			if label == 0 {
+				self.sampleView.setAuthCode(string)
+			} else {
+				self.sampleView.setResponse(string)
+			}
+		}
+	}
 	
 	func saveState() {
 		
