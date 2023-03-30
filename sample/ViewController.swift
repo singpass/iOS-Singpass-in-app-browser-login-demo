@@ -55,7 +55,15 @@ class ViewController: UIViewController {
 	 For client configuration instructions, see the [README](https://github.com/openid/AppAuth-iOS/blob/master/Examples/Example-iOS_Swift-Carthage/README.md).
 	 */
 	//let kRedirectURI: String = "com.example.app:/oauth2redirect/example-provider"
-	let kRedirectURI: String = "sg.gov.singpass.app://ndisample.gov.sg/rp/sample"
+	
+	let redirectURIs: [String] = [
+		"sg.gov.singpass.app://ndisample.gov.sg/rp/sample", // custom scheme redirect uri
+		"https://app.singpass.gov.sg/rp/sample" // https redirect uri (Not Recommended)
+	]
+	
+	var kRedirectURI: String {
+		return redirectURIs[selectedScheme]
+	}
 	
 	/**
 	 RP Mobile App requests for PKCE code challenge for 1a
@@ -85,6 +93,9 @@ class ViewController: UIViewController {
 	private var state: String?
 	private var nonce: String?
 	
+	private var schemes: [String] = ["app scheme", "https scheme (Not recommended)"]
+	private var selectedScheme = 0
+	
 	@IBOutlet weak var sampleView: SampleView!
 	
 	override func viewDidLoad() {
@@ -98,6 +109,10 @@ class ViewController: UIViewController {
 		sampleView.setupUI()
 		sampleView.buttonDelegate = self
 		self.loadState()
+		
+		sampleView.tableView.delegate = self
+		sampleView.tableView.dataSource = self
+		sampleView.tableView.allowsSelection = true
 	}
 }
 
@@ -224,7 +239,8 @@ extension ViewController {
 		var reqBody: [String: String] = [
 			"code": authCode,
 			"session_id": session_id,
-			"session_verifier": sessionVerifier
+			"session_verifier": sessionVerifier,
+			"redirect_uri": kRedirectURI
 		]
 		
 		if let state, let nonce {
@@ -270,7 +286,7 @@ extension ViewController {
 		// builds authentication request
 		var request: OIDAuthorizationRequest {
 			var dict: [String: String] = [appLaunchURL: appLinkURL]
-			
+
 			if myInfo {
 				dict["purpose_id"] = "demonstration"
 				
@@ -287,6 +303,10 @@ extension ViewController {
 											   codeChallengeMethod: codeChallengeMethod,
 											   additionalParameters: dict)
 			} else {
+				if selectedScheme != 0 {
+					dict["redirect_uri_https_type"] = "app_claimed_https"
+				}
+				
 				return OIDAuthorizationRequest(configuration: configuration,
 											   clientId: clientID,
 											   clientSecret: nil,
@@ -358,6 +378,48 @@ extension ViewController {
 		}
 		
 		self.present(alert, animated: true, completion: nil)
+	}
+}
+
+extension ViewController: UITableViewDataSource {
+	
+	func numberOfSections(in tableView: UITableView) -> Int {
+		return 1
+	}
+	
+	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		return schemes.count
+	}
+
+	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		let cell = tableView.dequeueReusableCell(withIdentifier: "scheme", for: indexPath) as UITableViewCell
+		if #available(iOS 14.0, *) {
+			var content = cell.defaultContentConfiguration()
+			content.text = schemes[indexPath.row]
+			content.textProperties.font = .Body()
+			cell.contentConfiguration = content
+			
+		} else {
+			cell.textLabel?.text = schemes[indexPath.row]
+			cell.textLabel?.font = .Body()
+		}
+		
+		cell.accessoryType = .none
+		
+		if indexPath.row == selectedScheme {
+			cell.accessoryType = .checkmark
+		}
+		
+		return cell
+	}
+}
+
+extension ViewController: UITableViewDelegate {
+	
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		selectedScheme = indexPath.row
+		
+		tableView.reloadData()
 	}
 }
 

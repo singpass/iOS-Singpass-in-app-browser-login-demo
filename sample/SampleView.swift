@@ -15,6 +15,7 @@ protocol LoginButtonDelegate: AnyObject {
 
 class SampleView: UIView {
 	@IBOutlet weak var titleLabel: UILabel!
+	@IBOutlet weak var tableView: UITableView!
 	@IBOutlet weak var loginButton: UIButton!
 	@IBOutlet weak var myinfoButton: UIButton!
 	@IBOutlet weak var authCodeLabel: UILabel!
@@ -26,6 +27,9 @@ class SampleView: UIView {
 		titleLabel.font = .Heading_3_SemiBold()
 		authCodeLabel.font = .Body()
 		responseLabel.font = .Body()
+		
+		tableView.backgroundColor = .clear
+		tableView.isScrollEnabled = false
 		
 		let loginTapGesture = UITapGestureRecognizer(target: self, action: #selector(loginAction))
 		loginButton.addGestureRecognizer(loginTapGesture)

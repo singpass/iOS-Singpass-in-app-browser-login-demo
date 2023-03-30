@@ -28,5 +28,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		return false
 	}
+	
+	func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+		if let authorizationFlow = self.currentAuthorizationFlow, authorizationFlow.resumeExternalUserAgentFlow(with: userActivity.webpageURL!) {
+			self.currentAuthorizationFlow = nil
+			return true
+		}
+		
+		return false
+	}
 }
 
