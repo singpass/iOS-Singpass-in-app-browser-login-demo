@@ -44,6 +44,7 @@ This repository has codes for a sample iOS application implementing the recommen
 1. Implement endpoint to serve `code_challenge`, `code_challenge_method`, `state`, `nonce` and other parameters needed for **RP Mobile App** to initiate the login flow.
    <br><br>
 2. Implement endpoint in receive `authorization code`, `state` and other required parameters.
+3. Register your new `redirect_uri` for your OAuth client_id
 
 # Potential changes/enhancements for RP Mobile App
 1. Integrate [AppAuth](https://github.com/openid/AppAuth-iOS) library to handle launching of authorization endpoint webpage in an in app browser.
@@ -55,9 +56,16 @@ This repository has codes for a sample iOS application implementing the recommen
 # Other Notes
 - Please use the query param `app_launch_url` when opening the authorization endpoint webpage for iOS to enable Singpass App to return to RP mobile app automatically.
   <br><br>
-- Recommended to **NOT** use `redirect_uri` with a `https` scheme e.g. https://rp.redirectUri/callback due to potential UX issues when redirecting back to **RP Mobile App** from the external web browser. Use iOS URL scheme instead as the redirect_uri. e.g. sg.gov.singpass.app://ndisample.gov.sg/rp/sample
+- Recommended to **NOT** use `redirect_uri` with a `https` scheme e.g. https://rp.redirectUri/callback due to potential UX issues when redirecting back to **RP Mobile App** from the external web browser. Use iOS URL scheme instead as the redirect_uri. e.g. sg.gov.singpass.app://ndisample.gov.sg/rp/sample*
   <br><br>
 - The sample mobile appplication code in this repository receives the token endpoint response from the RP Backend, RPs should **NOT** do this, **RP Backend** should get the token response and do your appropriate processing.
+
+&#8203;*If https scheme for `redirect_uri` is ***really needed*** to be used in your app, please add in a query parameter, `redirect_uri_https_type=app_claimed_https` when launching the authorization endpoint in the in-app browser. (only for direct Singpass logins, not applicable to MyInfo logins).
+
+e.g.
+```
+https://stg-id.singpass.gov.sg/auth?redirect_uri=https%3A%2F%2Fapp.singpass.gov.sg%2Frp%2Fsample&client_id=ikivDlY5OlOHQVKb8ZIKd4LSpr3nkKsK&response_type=code&state=9_fVucO3cHJIIjR50wr2ctFPYIJLMt_NV6rvLBNQxlztWSCCWbCYMkesXdBC93lX&nonce=7d0c9f09-1c1a-400e-b026-77cc7bc89cd0&scope=openid&code_challenge=ZnRSoTcoIncnebg0mCqNT-E5fbRNQ8zcYkly52-qWxw&code_challenge_method=S256&redirect_uri_https_type=app_claimed_https
+```
 
 # Implementation Details
 
@@ -67,6 +75,28 @@ AppAuth iOS Library
 > pod 'AppAuth'
 
 ## Implementation
+
+### In the Info.plist
+
+Configure a custom URL scheme for your app in Info.plist with `redirect_uri`.
+
+```xml
+<dict>
+  <key>CFBundleURLTypes</key>
+  <array>
+    <dict>
+      <key>CFBundleTypeRole</key>
+      <string>Viewer</string>
+      <key>CFBundleURLName</key>
+      <string>sg.ndi.sample</string>
+      <key>CFBundleURLSchemes</key>
+      <array>
+        <string>sg.gov.singpass.app</string>
+      </array>
+    </dict>
+  </array>
+</dict>
+```
 
 ### In the ViewController
 
@@ -178,3 +208,25 @@ Include camera permission in **info.plist** to allow Singpass Face Verification(
 | MyInfo Mockpass Demo | Singpass Demo |
 |---|---|
 | <img src="myinfo_pkce.gif" alt="Myinfo Mockpass flow video" width="300px" height="600px"></img> |  <img src="singpass_pkce.gif" alt="Singpass flow video" width="300px" height="600px"></img> |
+
+## FAQ
+
+- How do I know if I am using [Safari](https://developer.apple.com/documentation/safariservices/sfsafariviewcontroller), external web browser or [WebView](https://developer.apple.com/documentation/webkit/wkwebview)?
+
+You can tell if the Singpass login page is being open in [Safari](https://developer.apple.com/documentation/safariservices/sfsafariviewcontroller) by looking at the action sheet. In-app browsers using [Safari](https://developer.apple.com/documentation/safariservices/sfsafariviewcontroller) includes features such as Reader, AutoFill, Fraudulent Website Detection, and content blocking.
+
+Based on Apple's documentation:
+<br>
+`The view controller includes Safari features such as Reader, AutoFill, Fraudulent Website Detection, and content blocking. In iOS 9 and 10, it shares cookies and other website data with Safari. The user's activity and interaction with SFSafariViewController are not visible to your app, which cannot access AutoFill data, browsing history, or website data. You do not need to secure data between your app and Safari. If you would like to share data between your app and Safari in iOS 11 and later, so it is easier for a user to log in only one time, use ASWebAuthenticationSession instead`
+
+| Safari In-app Browser | Webview |
+|---|---|
+| <img src="safari_reader_and_content_blocking.jpeg" alt="Safari in-app browser" width="300px" height="600px"></img> |  <img src="webview.png" alt="Webview" width="300px" height="600px"></img> |
+
+<br>
+
+You can tell if the Singpass login page is opened in a external web browser by looking for the editable address bar. Below are 2 examples.
+
+| Safari Browser | Chrome Browser |     
+|----------------|----------------|
+| <img src="safari_browser.png" alt="Safari browser" width="300px" height="600px"></img> | <img src="chrome_browser.jpeg" alt="Chrome browser" width="300px" height="600px"></img> |
