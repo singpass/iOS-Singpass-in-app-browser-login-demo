@@ -56,16 +56,13 @@ This repository has codes for a sample iOS application implementing the recommen
 # Other Notes
 - Please use the query param `app_launch_url` when opening the authorization endpoint webpage for iOS to enable Singpass App to return to RP mobile app automatically.
   <br><br>
-- Recommended to **NOT** use `redirect_uri` with a `https` scheme e.g. https://rp.redirectUri/callback due to potential UX issues when redirecting back to **RP Mobile App** from the external web browser. Use iOS URL scheme instead as the redirect_uri. e.g. sg.gov.singpass.app://ndisample.gov.sg/rp/sample*
+- Strongly recommended to use either [Android DeepLinks](https://developer.android.com/training/app-links#deep-links) or [iOS URL Schemes](https://support.apple.com/en-sg/guide/shortcuts/apd621a1ad7a/6.0/ios/16.0) for your `redirect_uri`. This will prevent usability issues when external web browser redirects back to the RP Mobile App. An example of such a URI is: `sg.gov.singpass.app://ndisample.gov.sg/rp/sample`.
   <br><br>
-- The sample mobile appplication code in this repository receives the token endpoint response from the RP Backend, RPs should **NOT** do this, **RP Backend** should get the token response and do your appropriate processing.
-
-&#8203;*If https scheme for `redirect_uri` is ***really needed*** to be used in your app, please add in a query parameter, `redirect_uri_https_type=app_claimed_https` when launching the authorization endpoint in the in-app browser. (only for direct Singpass logins, not applicable to MyInfo logins).
-
-e.g.
-```
-https://stg-id.singpass.gov.sg/auth?redirect_uri=https%3A%2F%2Fapp.singpass.gov.sg%2Frp%2Fsample&client_id=ikivDlY5OlOHQVKb8ZIKd4LSpr3nkKsK&response_type=code&state=9_fVucO3cHJIIjR50wr2ctFPYIJLMt_NV6rvLBNQxlztWSCCWbCYMkesXdBC93lX&nonce=7d0c9f09-1c1a-400e-b026-77cc7bc89cd0&scope=openid&code_challenge=ZnRSoTcoIncnebg0mCqNT-E5fbRNQ8zcYkly52-qWxw&code_challenge_method=S256&redirect_uri_https_type=app_claimed_https
-```
+- Although the sample mobile application code in this repository provides an example of how to receive the token endpoint response from the RP Backend, RPs will need to cater for their own processing of the token response instead.
+<br><br>
+- In the case where using use either [Android DeepLinks](https://developer.android.com/training/app-links#deep-links) or [iOS URL Schemes](https://support.apple.com/en-sg/guide/shortcuts/apd621a1ad7a/6.0/ios/16.0) as the `redirect_uri` is not possible, an additional query parameter, `redirect_uri_https_type=app_claimed_https` should be added to the authorization endpoint when launching in the in-app browser. This applies only to direct Singpass logins, and not to Myinfo logins. An example of such a URI is: `https://stg-id.singpass.gov.sg/auth?redirect_uri=https%3A%2F%2Fapp.singpass.gov.sg%2Frp%2Fsample&client_id=ikivDlY5OlOHQVKb8ZIKd4LSpr3nkKsK&response_type=code&state=9_fVucO3cHJIIjR50wr2ctFPYIJLMt_NV6rvLBNQxlztWSCCWbCYMkesXdBC93lX&nonce=7d0c9f09-1c1a-400e-b026-77cc7bc89cd0&scope=openid&code_challenge=ZnRSoTcoIncnebg0mCqNT-E5fbRNQ8zcYkly52-qWxw&code_challenge_method=S256&redirect_uri_https_type=app_claimed_https`.
+ <br><br>
+- Do contact us if you face any issues adding your `redirect_uri`.
 
 # Implementation Details
 
