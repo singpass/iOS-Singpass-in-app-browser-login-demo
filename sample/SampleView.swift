@@ -15,7 +15,7 @@ protocol LoginButtonDelegate: AnyObject {
 
 class SampleView: UIView {
 	@IBOutlet weak var titleLabel: UILabel!
-	@IBOutlet weak var tableView: UITableView!
+	@IBOutlet weak var tableView: IntrinsicTableView!
 	@IBOutlet weak var loginButton: UIButton!
 	@IBOutlet weak var myinfoButton: UIButton!
 	@IBOutlet weak var authCodeLabel: UILabel!
@@ -55,5 +55,18 @@ extension SampleView {
 	@objc
 	func myinfoAction() {
 		buttonDelegate?.myinfoAction()
+	}
+}
+
+final class IntrinsicTableView: UITableView {
+	override var contentSize: CGSize {
+		didSet {
+			invalidateIntrinsicContentSize()
+		}
+	}
+	
+	override var intrinsicContentSize: CGSize {
+		layoutIfNeeded()
+		return CGSize(width: UIView.noIntrinsicMetric, height: contentSize.height)
 	}
 }

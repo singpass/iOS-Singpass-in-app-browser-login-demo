@@ -20,11 +20,19 @@ class ViewController: UIViewController {
 	 */
 	var serviceConfigEndpoints: [String: String] {
 		if myInfo {
-			return [
-				"issuer": "https://test.api.myinfo.gov.sg",
-				"authorizationEndpoint": "https://test.api.myinfo.gov.sg/com/v4/authorize",
-				"tokenEndpoint": "https://test.api.myinfo.gov.sg/com/v4/token"
-			]
+			if enablePKCE {
+				return [
+					"issuer": "https://test.api.myinfo.gov.sg",
+					"authorizationEndpoint": "https://test.api.myinfo.gov.sg/com/v4/authorize",
+					"tokenEndpoint": "https://test.api.myinfo.gov.sg/com/v4/token"
+				]
+			} else {
+				return [
+					"issuer": "https://test.api.myinfo.gov.sg",
+					"authorizationEndpoint": "https://test.api.myinfo.gov.sg/com/v3/authorise",
+					"tokenEndpoint": "https://test.api.myinfo.gov.sg/com/v3/token"
+				]
+			}
 		} else {
 			return [
 				"issuer": "https://stg-id.singpass.gov.sg",
@@ -43,7 +51,11 @@ class ViewController: UIViewController {
 	//let kClientID: String? = "YOUR_CLIENT_ID"
 	var kClientID: String? {
 		if myInfo {
-			return "STG2-MYINFO-SELF-TEST"
+			if enablePKCE {
+				return "STG2-MYINFO-SELF-TEST"
+			} else {
+				return "STG2-MYINFO-DEMO-APP"
+			}
 		} else {
 			return "ikivDlY5OlOHQVKb8ZIKd4LSpr3nkKsK"
 		}
@@ -67,8 +79,9 @@ class ViewController: UIViewController {
 	
 	/**
 	 RP Mobile App requests for PKCE code challenge for 1a
+	 This property is for RP to provide their own backend endpoint to facilitate the generation of the code challenge
 	 */
-	var generatePKCECodeChallenge: String = ""
+	var generatePKCECodeChallengeEndpoint: String = ""
 	
 	/**
 	 RP Backend endpoints for 3a
@@ -93,10 +106,13 @@ class ViewController: UIViewController {
 	private var state: String?
 	private var nonce: String?
 	
-	private var schemes: [String] = ["app scheme", "https scheme (Not recommended)"]
+	private var schemes: [String] = ["app scheme", "https scheme"]
 	private var selectedScheme = 0
+	private var enablePKCE = true
 	
 	@IBOutlet weak var sampleView: SampleView!
+	
+	private var enablePkceString: String = "Enable PKCE"
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -121,18 +137,18 @@ extension ViewController {
 	///	1a) Call RP Backend to generate PKCE code
 	///	1b) RP Backend responds with requested parameters. (code_challenge, code_challenge_method, state, nonce)
 	func getPKCECode() {
-		guard !generatePKCECodeChallenge.isEmpty else {
-			self.log("Error: generatePKCECodeChallenge is not set", label: 0)
+		guard !generatePKCECodeChallengeEndpoint.isEmpty else {
+			self.log("Error: generatePKCECodeChallengeEndpoint is not set", label: 0)
 			return
 		}
 		
 		guard let randomBytes = generateRandomBytes() else {
-			self.log("Error: failed to generate session verifier for \(generatePKCECodeChallenge)", label: 0)
+			self.log("Error: failed to generate session verifier for \(generatePKCECodeChallengeEndpoint)", label: 0)
 			return
 		}
 		printd("The session verifier is : \(String(describing: sessionVerifier))")
 		guard let sessionChallenge = randomBytes.sha256() else {
-			self.log("Error: failed to generate session challenge for \(generatePKCECodeChallenge)", label: 0)
+			self.log("Error: failed to generate session challenge for \(generatePKCECodeChallengeEndpoint)", label: 0)
 			return
 		}
 		self.sessionChallenge = sessionChallenge
@@ -141,14 +157,18 @@ extension ViewController {
 		var urlString: String
 		
 		if myInfo {
-			urlString = generatePKCECodeChallenge + "&myinfo=%@"
+			urlString = generatePKCECodeChallengeEndpoint + "&myinfo=%@"
 			urlString = String(format: urlString, sessionChallenge, String(myInfo))
 		} else {
-			urlString = String(format: generatePKCECodeChallenge, sessionChallenge)
+			urlString = String(format: generatePKCECodeChallengeEndpoint, sessionChallenge)
+		}
+		
+		if enablePKCE {
+			urlString += "&require_pkce=\(String(enablePKCE))"
 		}
 		
 		guard let url = URL(string: urlString) else {
-			self.log("Error: failed to create URL for requesting PKCE parameters \(generatePKCECodeChallenge)", label: 0)
+			self.log("Error: failed to create URL for requesting PKCE parameters \(generatePKCECodeChallengeEndpoint)", label: 0)
 			return
 		}
 		
@@ -243,11 +263,16 @@ extension ViewController {
 			"redirect_uri": kRedirectURI
 		]
 		
-		if let state, let nonce {
+		if let state {
 			reqBody["state"] = state
+		} else {
+			printd("No state for : \(url)")
+		}
+		
+		if let nonce {
 			reqBody["nonce"] = nonce
 		} else {
-			printd("No state and nonce for : \(url)")
+			printd("No nonce for : \(url)")
 		}
 		
 		var request = URLRequest(url: url)
@@ -288,15 +313,20 @@ extension ViewController {
 			var dict: [String: String] = [appLaunchURL: appLinkURL]
 
 			if myInfo {
-				dict["purpose_id"] = "demonstration"
+				if enablePKCE {
+					dict["purpose_id"] = "demonstration"
+				} else {
+					dict["purpose"] = "demonstrating MyInfo APIs"
+					dict["attributes"] = "name"
+				}
 				
 				return OIDAuthorizationRequest(configuration: configuration,
 											   clientId: clientID,
 											   clientSecret: nil,
-											   scope: "name",
+											   scope: enablePKCE ? "name" : nil,
 											   redirectURL: redirectURI,
 											   responseType: OIDResponseTypeCode,
-											   state: nil,
+											   state: enablePKCE ? nil : state,
 											   nonce: nil,
 											   codeVerifier: nil,
 											   codeChallenge: codeChallenge,
@@ -335,7 +365,7 @@ extension ViewController {
 				self.log("AuthCode: \(response.authorizationCode ?? "no code returned")", label: 0)
 				
 				if self.myInfo {
-					self.postAuthCode()
+					self.postAuthCode(state: request.state)
 				} else {
 					self.postAuthCode(nonce: request.nonce, state: request.state)
 				}
@@ -381,45 +411,68 @@ extension ViewController {
 	}
 }
 
+// MARK: - UITableViewDataSource
 extension ViewController: UITableViewDataSource {
 	
 	func numberOfSections(in tableView: UITableView) -> Int {
-		return 1
+		return 2
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return schemes.count
+		return section == 0 ? 1 : schemes.count
 	}
 
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "scheme", for: indexPath) as UITableViewCell
+
 		if #available(iOS 14.0, *) {
 			var content = cell.defaultContentConfiguration()
-			content.text = schemes[indexPath.row]
+			content.text = indexPath.section == 0 ? enablePkceString : schemes[indexPath.row]
 			content.textProperties.font = .Body()
 			cell.contentConfiguration = content
-			
 		} else {
-			cell.textLabel?.text = schemes[indexPath.row]
+			cell.textLabel?.text = indexPath.section == 0 ? enablePkceString : schemes[indexPath.row]
 			cell.textLabel?.font = .Body()
 		}
 		
-		cell.accessoryType = .none
-		
-		if indexPath.row == selectedScheme {
-			cell.accessoryType = .checkmark
+		if indexPath.section == 0 {
+			let toggleSwitch = UISwitch(frame: CGRectZero) as UISwitch
+			toggleSwitch.isOn = enablePKCE
+			toggleSwitch.addTarget(self, action: #selector(togglePKCE), for: .valueChanged)
+			cell.accessoryView = toggleSwitch
+		} else {
+			cell.accessoryType = indexPath.row == selectedScheme ? .checkmark : .none
 		}
 		
 		return cell
 	}
+	
+	@objc
+	func togglePKCE() {
+		enablePKCE = !enablePKCE
+	}
 }
 
+// MARK: - UITableViewDelegate
 extension ViewController: UITableViewDelegate {
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		selectedScheme = indexPath.row
-		
-		tableView.reloadData()
+		if indexPath.section == 1 {
+			selectedScheme = indexPath.row
+			tableView.reloadSections([indexPath.section], with: .none)
+		}
+	}
+	
+	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+		return UIView()
+	}
+	
+	func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+		return CGFloat.leastNormalMagnitude
+	}
+	
+	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+		self.viewWillLayoutSubviews()
 	}
 }
 
@@ -490,6 +543,7 @@ extension ViewController {
 }
 
 extension ViewController {
+	
 	func generateRandomBytes() -> String? {
 		var bytes = [UInt8](repeating: 0, count: 64)
 		let result = SecRandomCopyBytes(kSecRandomDefault, bytes.count, &bytes)
