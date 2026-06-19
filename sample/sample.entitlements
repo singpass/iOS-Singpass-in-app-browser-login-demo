@@ -5,6 +5,7 @@
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>applinks:app.singpass.gov.sg</string>
+		<string>webcredentials:app.singpass.gov.sg</string>
 	</array>
 </dict>
 </plist>

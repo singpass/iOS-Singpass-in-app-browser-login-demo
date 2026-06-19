@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4394687B29A7455F0029739B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4394687A29A7455F0029739B /* AppDelegate.swift */; };
-		4394687F29A7455F0029739B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4394687E29A7455F0029739B /* ViewController.swift */; };
 		4394688229A7455F0029739B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4394688029A7455F0029739B /* Main.storyboard */; };
 		4394688429A745610029739B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4394688329A745610029739B /* Assets.xcassets */; };
 		4394688729A745610029739B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4394688529A745610029739B /* LaunchScreen.storyboard */; };
@@ -19,17 +18,18 @@
 		43CADAE929A7616100C1E8E6 /* NDITheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CADAE829A7616100C1E8E6 /* NDITheme.swift */; };
 		43CADAED29A7623A00C1E8E6 /* NDIFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CADAEC29A7623A00C1E8E6 /* NDIFonts.swift */; };
 		43CADAEE29A7662600C1E8E6 /* NDIColour.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43CADAE729A7614B00C1E8E6 /* NDIColour.xcassets */; };
-		889BD8256D77E5744C1E211C /* Pods_sample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00DFC8953A211F87C3ABC606 /* Pods_sample.framework */; };
+		43D83F1A2FC9DEEF003202B3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 43D83F192FC9DEEF003202B3 /* GoogleService-Info.plist */; };
 		92B8F69129ACFCAA0014711A /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B8F69029ACFCAA0014711A /* Data+Extension.swift */; };
+		A364D0E8D723FA48A74C5DC2 /* Fapi2PkceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28207F94DD8AF87D0AC4B7A8 /* Fapi2PkceViewController.swift */; };
+		AA77F3670E884D9A6DC1782A /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3801A883E3EA332DC38BDAB4 /* AppConfig.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		00DFC8953A211F87C3ABC606 /* Pods_sample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_sample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		0B76CDCFBC68FE5038A7B04C /* Pods-sample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sample.debug.xcconfig"; path = "Target Support Files/Pods-sample/Pods-sample.debug.xcconfig"; sourceTree = "<group>"; };
+		28207F94DD8AF87D0AC4B7A8 /* Fapi2PkceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fapi2PkceViewController.swift; sourceTree = "<group>"; };
+		3801A883E3EA332DC38BDAB4 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
 		438AE0EF29D1926A00E1ECC5 /* sample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = sample.entitlements; sourceTree = "<group>"; };
 		4394687729A7455F0029739B /* sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4394687A29A7455F0029739B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		4394687E29A7455F0029739B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		4394688129A7455F0029739B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4394688329A745610029739B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4394688629A745610029739B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -41,8 +41,8 @@
 		43CADAE729A7614B00C1E8E6 /* NDIColour.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = NDIColour.xcassets; sourceTree = "<group>"; };
 		43CADAE829A7616100C1E8E6 /* NDITheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDITheme.swift; sourceTree = "<group>"; };
 		43CADAEC29A7623A00C1E8E6 /* NDIFonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDIFonts.swift; sourceTree = "<group>"; };
+		43D83F192FC9DEEF003202B3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		92B8F69029ACFCAA0014711A /* Data+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extension.swift"; sourceTree = "<group>"; };
-		AD639DE48222624CE8201811 /* Pods-sample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sample.release.xcconfig"; path = "Target Support Files/Pods-sample/Pods-sample.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,29 +50,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				889BD8256D77E5744C1E211C /* Pods_sample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		30F8DF447B56E881A5871A9A /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				0B76CDCFBC68FE5038A7B04C /* Pods-sample.debug.xcconfig */,
-				AD639DE48222624CE8201811 /* Pods-sample.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		4394686E29A7455F0029739B = {
 			isa = PBXGroup;
 			children = (
 				4394687929A7455F0029739B /* sample */,
 				4394687829A7455F0029739B /* Products */,
-				30F8DF447B56E881A5871A9A /* Pods */,
-				463560C64F5985BDF984A941 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -91,12 +79,14 @@
 				43CADAE029A7509000C1E8E6 /* utilities */,
 				439468AA29A74B9C0029739B /* theme */,
 				4394687A29A7455F0029739B /* AppDelegate.swift */,
-				4394687E29A7455F0029739B /* ViewController.swift */,
+				28207F94DD8AF87D0AC4B7A8 /* Fapi2PkceViewController.swift */,
 				4394688029A7455F0029739B /* Main.storyboard */,
 				4394688329A745610029739B /* Assets.xcassets */,
 				4394688529A745610029739B /* LaunchScreen.storyboard */,
+				43D83F192FC9DEEF003202B3 /* GoogleService-Info.plist */,
 				4394688829A745610029739B /* Info.plist */,
 				43CADADC29A74D9300C1E8E6 /* SampleView.swift */,
+				3801A883E3EA332DC38BDAB4 /* AppConfig.swift */,
 			);
 			path = sample;
 			sourceTree = "<group>";
@@ -122,14 +112,6 @@
 			path = utilities;
 			sourceTree = "<group>";
 		};
-		463560C64F5985BDF984A941 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				00DFC8953A211F87C3ABC606 /* Pods_sample.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -137,11 +119,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 439468A129A745610029739B /* Build configuration list for PBXNativeTarget "sample" */;
 			buildPhases = (
-				8265E812077812289346EE3D /* [CP] Check Pods Manifest.lock */,
 				4394687329A7455F0029739B /* Sources */,
 				4394687429A7455F0029739B /* Frameworks */,
 				4394687529A7455F0029739B /* Resources */,
-				5541A5E7818DAC9A021F113D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -176,6 +156,8 @@
 				Base,
 			);
 			mainGroup = 4394686E29A7455F0029739B;
+			packageReferences = (
+			);
 			productRefGroup = 4394687829A7455F0029739B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -195,52 +177,11 @@
 				43CADAEE29A7662600C1E8E6 /* NDIColour.xcassets in Resources */,
 				4394688429A745610029739B /* Assets.xcassets in Resources */,
 				4394688229A7455F0029739B /* Main.storyboard in Resources */,
+				43D83F1A2FC9DEEF003202B3 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		5541A5E7818DAC9A021F113D /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-sample/Pods-sample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-sample/Pods-sample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-sample/Pods-sample-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		8265E812077812289346EE3D /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-sample-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4394687329A7455F0029739B /* Sources */ = {
@@ -250,11 +191,12 @@
 				43CADADF29A7507600C1E8E6 /* String+Extension.swift in Sources */,
 				92B8F69129ACFCAA0014711A /* Data+Extension.swift in Sources */,
 				43CADAE429A750E200C1E8E6 /* Print.swift in Sources */,
-				4394687F29A7455F0029739B /* ViewController.swift in Sources */,
 				43CADADD29A74D9300C1E8E6 /* SampleView.swift in Sources */,
 				4394687B29A7455F0029739B /* AppDelegate.swift in Sources */,
 				43CADAED29A7623A00C1E8E6 /* NDIFonts.swift in Sources */,
 				43CADAE929A7616100C1E8E6 /* NDITheme.swift in Sources */,
+				AA77F3670E884D9A6DC1782A /* AppConfig.swift in Sources */,
+				A364D0E8D723FA48A74C5DC2 /* Fapi2PkceViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -396,14 +338,13 @@
 		};
 		439468A229A745610029739B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0B76CDCFBC68FE5038A7B04C /* Pods-sample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = sample/sample.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 4CYF853X55;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = sample/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "To enable face verification";
@@ -428,14 +369,13 @@
 		};
 		439468A329A745610029739B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AD639DE48222624CE8201811 /* Pods-sample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = sample/sample.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 4CYF853X55;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = sample/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "To enable face verification";

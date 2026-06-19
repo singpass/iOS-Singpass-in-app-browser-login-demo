@@ -7,34 +7,53 @@
 //
 
 import UIKit
-import AppAuth
+import AuthenticationServices
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	var window: UIWindow?
-	var currentAuthorizationFlow: OIDExternalUserAgentSession?
-	
+
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		// Override point for customization after application launch.
 		return true
 	}
 	
 	func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-		if let authorizationFlow = self.currentAuthorizationFlow, authorizationFlow.resumeExternalUserAgentFlow(with: url) {
-			self.currentAuthorizationFlow = nil
-			return true
-		}
-		
 		return false
 	}
 	
 	func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-		if let authorizationFlow = self.currentAuthorizationFlow, authorizationFlow.resumeExternalUserAgentFlow(with: userActivity.webpageURL!) {
-			self.currentAuthorizationFlow = nil
-			return true
+		
+		printd("DEBUG - ASWeb callback: \(userActivity.webpageURL?.absoluteString, default: "<nil>")")
+		
+		guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+			  let url = userActivity.webpageURL else {
+			return false
 		}
 		
+		let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true)
+		
+		guard let queryItems = urlComponents?.queryItems,
+			  let code = queryItems.first(where: { $0.name == "code" })?.value,
+			  !code.isEmpty,
+			  let state = queryItems.first(where: { $0.name == "state" })?.value,
+			  !state.isEmpty
+		else {
+			return false
+		}
+		
+		if #available(iOS 13.0, *) {
+			if let session = WebSessionManager.shared.webAuthSession, let vc = WebSessionManager.shared.viewController {
+				WebSessionManager.shared.webAuthSession = nil
+				session.cancel()
+				
+				vc.authSessionCallback(code: code, state: state)
+			} else {
+				printd("DEBUG - app invoked, but no webAuthSession active, for \(userActivity.webpageURL?.absoluteString, default: "<nil>")")
+			}
+		}
+
 		return false
 	}
 }

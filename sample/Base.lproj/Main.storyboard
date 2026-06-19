@@ -13,7 +13,7 @@
         <!--View Controller-->
         <scene sceneID="76d-PB-OZG">
             <objects>
-                <viewController id="DsD-Fg-2ZM" customClass="ViewController" customModule="sample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="DsD-Fg-2ZM" storyboardIdentifier="Fapi2PkceViewController" customClass="Fapi2PkceViewController" customModule="sample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lBH-j7-AZm" customClass="SampleView" customModule="sample" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

@@ -10,204 +10,204 @@ authorization servers to support such usage.
 
 *Quoted from RFC8252.*
 
-This repository has codes for a sample iOS application implementing the recommended [Proof Key for Code Exchange (PKCE)](https://www.rfc-editor.org/rfc/rfc7636) for Singpass logins. The application will demonstrate the Singpass login flow with PKCE leveraging on the iOS [AppAuth](https://github.com/openid/AppAuth-iOS) library.
+This repository contains a sample iOS application demonstrating the FAPI2 Singpass login flow using Apple's [`ASWebAuthenticationSession`](https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession) — no third-party OAuth library required.
 
-# Sequence Diagram
-![Sequence Diagram](pkce_sequence_diagram.png)
+- **FAPI2 Singpass Login** (`Fapi2PkceViewController`) — the recommended modern flow using [Financial-grade API (FAPI2)](https://openid.net/specs/fapi-security-profile-2_0.html) with Pushed Authorization Requests (PAR). The RP Backend handles PKCE and DPoP; the mobile app only passes `request_uri` to the authorization endpoint.
+
+---
+
+# FAPI2 Singpass Login Flow (Fapi2PkceViewController)
+
+![FAPI2 Sequence Diagram](fapi_pkce_sequence_diagram.svg)
 
 <br>
 
 *RP stands for **Relying Party**
 
-- 1a) Call **RP Backend** to obtain backend generate `code_challenge`, `code_challenge_method` along with `state` and `nonce` if required. #
+- 1a) **RP Mobile App** calls **RP Backend** PAR endpoint to initiate the login session.
 <br><br>
-- 1b) **RP Backend** responds with the requested parameters. (`code_challenge`, `code_challenge_method`, `state`, `nonce`) #
-  <br><br>
-- 2a) Open the Authorization endpoint in web browser via [AppAuth](https://github.com/openid/AppAuth-iOS) providing query params of `redirect_uri`*, `client_id`, `scope`, `code_challenge`, `code_challenge_method` along with `state` and `nonce` if required. There can be other query params provided if needed. e.g. (`purpose_id` for myInfo use cases)
-  <br><br>
-- 2b) The `authorization code` will be delivered back to **RP Mobile App**.
+- 1b) **RP Backend** generates the PKCE parameters and DPoP keypair, calls the Singpass Pushed Authorization Request (PAR) endpoint, and responds to the **RP Mobile App** with a `request_uri` and `state`.
 <br><br>
-- 3a) **RP Mobile App** Upon reception of `authorization code`, proceed to relay the Authorization code back to **RP Backend**. #
-  <br><br>
-- 3b) **RP Backend** will use the `authorization code` along with the generated `code_verifier` along with `state` and `nonce` if required, and do client assertion to call the token endpoint to obtain ID/access tokens.
+- 2a) **RP Mobile App** opens the Singpass authorization URL in the browser via [`ASWebAuthenticationSession`](https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession), supplying `request_uri` as a query parameter. No `code_challenge` is included — all authorization parameters are already encapsulated in the `request_uri`.
 <br><br>
-- 3c) Token endpoint responds with the token payload to **RP Backend**.
-  <br><br>
-- 3d) **RP Backend** process the token payload and does its required operations and responds to **RP Mobile App** with the appropriate session state tokens or data. #
-  <br><br>
-
-&#8203;* - Take note that the `redirect_uri` should be a non-https url that represents the app link of the **RP Mobile App** as configured in the [AppAuth](https://github.com/openid/AppAuth-iOS) library.
+- 2b) The `authorization code` and `state` are delivered back to **RP Mobile App** via the redirect URI.
+<br><br>
+- 3a) **RP Mobile App** relays `code`, `state`, and `redirectUri` to the **RP Backend** receive-auth-code endpoint. #
+<br><br>
+- 3b) **RP Backend** retrieves the stored PKCE verifier, calls the Singpass token endpoint, validates the tokens, and responds to **RP Mobile App** with a session token or appropriate session data. #
+<br><br>
 
 &#8203;# - It is up to the RP to secure the connection between **RP Mobile App** and **RP Backend**
 
-# Potential changes/enhancements for RP Backend
-1. Implement endpoint to serve `code_challenge`, `code_challenge_method`, `state`, `nonce` and other parameters needed for **RP Mobile App** to initiate the login flow.
-<br><br>
-2. Implement endpoint in receive `authorization code`, `state` and other required parameters.
-<br><br>
-4. Register your new `redirect_uri` for your OAuth client_id
+## Potential changes/enhancements for RP Backend (FAPI2)
 
-# Potential changes/enhancements for RP Mobile App
-1. Integrate [AppAuth](https://github.com/openid/AppAuth-iOS) library to handle launching of authorization endpoint webpage in an in app browser.
+1. Implement a PAR endpoint that generates PKCE parameters and a DPoP keypair, calls the Singpass PAR endpoint, and returns `request_uri` and `state` to the mobile app.
 <br><br>
-1. Implement api call to **RP Backend** to request for `code_challenge`, `code_challenge_method`, `state` and `nonce` if required and other parameters.
+2. Implement a receive-auth-code endpoint that accepts `code`, `state`, and `redirectUri`, retrieves the stored PKCE verifier, and calls the Singpass token endpoint.
 <br><br>
-1. Implement api call to send `authorization code`, `state` and other needed parameters back to **RP Backend**.
+3. Register your `redirect_uri` for your OAuth client_id with Singpass.
+
+## Potential changes/enhancements for RP Mobile App (FAPI2)
+
+1. Use [`ASWebAuthenticationSession`](https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession) (built into iOS 12+) to handle launching of the authorization endpoint in a secure in-app browser — no third-party library needed.
+<br><br>
+2. Implement an API call to **RP Backend** to request `request_uri` and `state`.
+<br><br>
+3. Launch the Singpass authorization URL with `request_uri` as a query parameter using `ASWebAuthenticationSession`.
+<br><br>
+4. Implement an API call to relay `authorization code`, `state`, and `redirectUri` back to **RP Backend**.
+
+---
 
 # Other Notes
-- Please use the query param `app_launch_url` when opening the authorization endpoint webpage for iOS to enable Singpass App to return to RP mobile app automatically.
-<br><br>
-- Do **NOT** use the query param `app_launch_url` if an external web browser is used instead of in app browser when opening the authorization endpoint webpage for iOS.
-<br><br>
-- Strongly recommended to use either [Android DeepLinks](https://developer.android.com/training/app-links#deep-links) or [iOS URL Schemes](https://support.apple.com/en-sg/guide/shortcuts/apd621a1ad7a/6.0/ios/16.0) for your `redirect_uri`. This will prevent usability issues when external web browser redirects back to the RP Mobile App. An example of such a URI is: `sg.gov.singpass.app://ndisample.gov.sg/rp/sample`.
-<br><br>
-- Although the sample mobile application code in this repository provides an example of how to receive the token endpoint response from the RP Backend, RPs will need to cater for their own processing of the token response instead.
-<br><br>
-- In the case where using use either [Android DeepLinks](https://developer.android.com/training/app-links#deep-links) or [iOS URL Schemes](https://support.apple.com/en-sg/guide/shortcuts/apd621a1ad7a/6.0/ios/16.0) as the `redirect_uri` is not possible, an additional query parameter, `redirect_uri_https_type=app_claimed_https` should be added to the authorization endpoint when launching in the in-app browser. This applies only to direct Singpass logins, and not to Myinfo logins. An example of such a URI is: `https://stg-id.singpass.gov.sg/auth?redirect_uri=https%3A%2F%2Fapp.singpass.gov.sg%2Frp%2Fsample&client_id=ikivDlY5OlOHQVKb8ZIKd4LSpr3nkKsK&response_type=code&state=9_fVucO3cHJIIjR50wr2ctFPYIJLMt_NV6rvLBNQxlztWSCCWbCYMkesXdBC93lX&nonce=7d0c9f09-1c1a-400e-b026-77cc7bc89cd0&scope=openid&code_challenge=ZnRSoTcoIncnebg0mCqNT-E5fbRNQ8zcYkly52-qWxw&code_challenge_method=S256&redirect_uri_https_type=app_claimed_https`.
- <br><br>
-- Do contact us if you face any issues adding your `redirect_uri`.
+- Please use the parameter `app_launch_url` when opening the authorization endpoint webpage for iOS to enable Singpass App to return to RP mobile app automatically.
+  <br><br>
+- For FAPI2 flow, a `https` redirect URI is required (e.g. `https://app.singpass.gov.sg/rp/sample`). Add the Associated Domains entitlement with both `applinks:` and `webcredentials:` for the callback domain in your app's `.entitlements` file.
+  <br><br>
+- The sample mobile application code in this repository receives the token endpoint response from the RP Backend. RPs should **NOT** do this — **RP Backend** should handle the token response and do its appropriate processing.
+  <br><br>
+- An additional parameter, `redirect_uri_https_type=app_claimed_https` should be added to the `/fapi/par` endpoint when obtaining the `request_uri` to launch in the in-app browser. Adding the parameter will present the user with an interstitial screen with a button if the web browser does not redirect the user back to the mobile app automatically.
+
+---
 
 # Implementation Details
 
 ## Required dependencies
 
-AppAuth iOS Library
-> pod 'AppAuth'
+None. `ASWebAuthenticationSession` is part of the `AuthenticationServices` framework, available from iOS 12.
 
 ## Implementation
 
-### In the Info.plist
+### In the entitlements file
 
-Configure a custom URL scheme for your app in Info.plist with `redirect_uri`.
+Add Associated Domains for the HTTPS redirect URI callback domain:
 
 ```xml
-<dict>
-  <key>CFBundleURLTypes</key>
-  <array>
-    <dict>
-      <key>CFBundleTypeRole</key>
-      <string>Viewer</string>
-      <key>CFBundleURLName</key>
-      <string>sg.ndi.sample</string>
-      <key>CFBundleURLSchemes</key>
-      <array>
-        <string>sg.gov.singpass.app</string>
-      </array>
-    </dict>
-  </array>
-</dict>
+<key>com.apple.developer.associated-domains</key>
+<array>
+    <string>applinks:app.singpass.gov.sg</string>
+    <string>webcredentials:app.singpass.gov.sg</string>
+</array>
 ```
 
-### In the ViewController
+`webcredentials` is required by `ASWebAuthenticationSession` when using an HTTPS callback URL on iOS 17.4+. The callback domain must also serve an [Apple App Site Association](https://developer.apple.com/documentation/xcode/supporting-associated-domains) file that includes your app's bundle ID under the `webcredentials` key.
 
-Set the necessary endpoints such as the `redirect_uri` and service configuration endpoints `issuer`, `authorizationEndpoint` and `tokenEndpoint`. 
-```swift
-let kRedirectURI: String = "sg.gov.singpass.app://ndisample.gov.sg/rp/sample"
-let serviceConfigEndpoints: [String: String] = [
-    "issuer": "https://test.api.myinfo.gov.sg",
-    "authorizationEndpoint": "https://test.api.myinfo.gov.sg/com/v4/authorize",
-    "tokenEndpoint": "https://test.api.myinfo.gov.sg/com/v4/token"
-]
-```
-<br>
+### In the Info.plist
 
-### 
-
-The below code snippets OAuth authorization flow with [AppAuth](https://github.com/openid/AppAuth-iOS)
-
-<br>
-
-Create the Oauth service configuration
-```swift
-  // This is the dictionary that describes the current Oauth service
-  // This example is using the test environment for MyInfo Singpass login 
-  let configuration = OIDServiceConfiguration(authorizationEndpoint: authURL, tokenEndpoint: tokenURL, issuer: issuerURL)
-```
-<br>
-
-Create the OAuth authorization request
-```swift
-// code_challenge and code_challenge_method generated from RP Backend
-// Set code_challenge for code_verifier as AppAuth library
-// Set code_verifier as nil
-// as we are not calling token endpoint from the mobile app  
-
-var request: OIDAuthorizationRequest {
-    var dict: [String: String] = [appLaunchURL: appLinkURL]
-
-    if myInfo {
-        // MyInfo Singpass login does not need nonce and state
-        // It needs purpose_id and has different scope values
-        dict["purpose_id"] = "demonstration"
-
-        return OIDAuthorizationRequest(configuration: configuration, // from the above section
-                                        clientId: clientID, // RP client_id
-                                        clientSecret: nil,
-                                        scope: "name", // myinfo_scope
-                                        redirectURL: redirectURI, // redirect_uri
-                                        responseType: OIDResponseTypeCode, // code
-                                        state: nil,
-                                        nonce: nil,
-                                        codeVerifier: nil,
-                                        codeChallenge: codeChallenge,
-                                        codeChallengeMethod: codeChallengeMethod,
-                                        additionalParameters: dict)
-    } else {
-        return OIDAuthorizationRequest(configuration: configuration, // from the above section
-                                        clientId: clientID, // RP client_id
-                                        clientSecret: nil,
-                                        scope: OIDScopeOpenID, // scope: openid
-                                        redirectURL: redirectURI, // redirect_uri
-                                        responseType: OIDResponseTypeCode,  // code
-                                        state: state, // state generated from RP Backend
-                                        nonce: nonce, // nonce generated from RP Backend
-                                        codeVerifier: nil,
-                                        codeChallenge: codeChallenge,
-                                        codeChallengeMethod: codeChallengeMethod,
-                                        additionalParameters: dict)
-    }
-}
-```
-<br>
-
-Create the OAuth authorization service to perform authorization code exchange.
-Upon reception of authorization code, proceed to relay the Authorization code back to the RP backend.
-```swift
-OIDAuthorizationService.present(request, presenting: self) { (response, error) in
-    
-    if let response = response {
-        let authState = OIDAuthState(authorizationResponse: response)
-        self.setAuthState(authState)
-        
-        printd("Authorization response with code: \(response.authorizationCode ?? "DEFAULT_CODE")")
-        
-        self.sampleView.setAuthCode(response.authorizationCode)
-        
-        if self.myInfo {
-            self.postAuthCode()
-        } else {
-            self.postAuthCode(nonce: request.nonce, state: request.state)
-        }
-    } else {
-        printd("Authorization error: \(error?.localizedDescription ?? "DEFAULT_ERROR")")
-    }
-}
-```
-
-## Permissions
-Include camera permission in **info.plist** to allow Singpass Face Verification(SFV)
-```
+Include camera permission to allow Singpass Face Verification (SFV):
+```xml
 <key>NSCameraUsageDescription</key>
 <string>To enable face verification</string>
 ```
-<br>
 
+### In AppConfig.swift
+
+Set your RP Backend Cloud Function endpoints:
+
+```swift
+enum AppConfig {
+    static let fapiGenerateRequestUriEndpoint = "<your-rp-backend-par-endpoint>"
+    static let fapiReceiveAuthCodeEndpoint    = "<your-rp-backend-receive-authcode-endpoint>"
+}
+```
+
+> `AppConfig.swift` is listed in `.gitignore` to keep backend endpoints out of source control. Copy and fill in the values locally.
+
+### In Fapi2PkceViewController
+
+Set the necessary client IDs and redirect URI:
+
+```swift
+let redirectURI:      String = "https://app.singpass.gov.sg/rp/sample"
+let callbackHostURL:  String = "app.singpass.gov.sg"
+let callbackPath:     String = "/rp/sample"
+```
+
+Step 1 — Fetch `request_uri` from RP Backend:
+```swift
+// GET RP Backend PAR endpoint
+var request = URLRequest(url: url)
+request.httpMethod = "GET"
+
+URLSession.shared.dataTask(with: request) { data, _, error in
+    // parse requestUri, state, nonce from response
+    self.performFapiAuthCodeExchange(requestUri: requestUri)
+}.resume()
+```
+
+Step 2 — Launch authorization URL with `ASWebAuthenticationSession`:
+```swift
+// iOS 17.4+ — uses the dedicated HTTPS callback API
+let session = ASWebAuthenticationSession(
+    url: authURL,
+    callback: .https(host: callbackHostURL, path: callbackPath)
+) { callbackURL, error in
+    // parse code and state from callbackURL query items
+    self.postFapiAuthCode(authCode: code, state: state)
+}
+
+// iOS < 17.4 — callbackURLScheme: nil lets the redirect arrive as a
+// Universal Link via AppDelegate → WebSessionManager → authSessionCallback
+let session = ASWebAuthenticationSession(
+    url: authURL,
+    callbackURLScheme: nil
+) { _, error in ... }
+
+session.presentationContextProvider = self
+session.start()
+```
+
+Step 3 — Relay `authorization code` to RP Backend:
+```swift
+// POST RP Backend receive-auth-code endpoint
+// Body (JSON): { code, state, nonce, redirectUri }
+var request = URLRequest(url: url)
+request.httpMethod = "POST"
+request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+request.httpBody = try? JSONSerialization.data(withJSONObject: [
+    "code":        authCode,
+    "state":       state ?? "",
+    "nonce":       nonce ?? "",
+    "redirectUri": redirectURI
+])
+```
+
+### In AppDelegate
+
+Handle the Universal Link callback for iOS < 17.4 (app-to-app Singpass flow):
+
+```swift
+func application(_ application: UIApplication,
+                 continue userActivity: NSUserActivity,
+                 restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+    guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+          let url = userActivity.webpageURL else { return false }
+
+    // parse code and state from url
+    // cancel the active ASWebAuthenticationSession and call authSessionCallback
+    if let session = WebSessionManager.shared.webAuthSession,
+       let vc = WebSessionManager.shared.viewController {
+        WebSessionManager.shared.webAuthSession = nil
+        session.cancel()
+        vc.authSessionCallback(code: code, state: state)
+    }
+    return false
+}
+```
 
 ## Demo Video/s
 
-| MyInfo Mockpass Demo | Singpass Demo |
+**Singpass**
+
+| Below iOS 17.4 | iOS 17.4 and above |
 |---|---|
-| <img src="myinfo_pkce.gif" alt="Myinfo Mockpass flow video" width="300px" height="600px"></img> |  <img src="singpass_pkce.gif" alt="Singpass flow video" width="300px" height="600px"></img> |
+| <img src="singpass_pkce_below_17_4.gif" alt="Singpass flow (below iOS 17.4)" width="300px" height="600px"></img> | <img src="singpass_pkce_17_4.gif" alt="Singpass flow (iOS 17.4+)" width="300px" height="600px"></img> |
+
+**MyInfo**
+
+| Below iOS 17.4 | iOS 17.4 and above |
+|---|---|
+| <img src="myinfo_pkce_below_17_4.gif" alt="MyInfo flow (below iOS 17.4)" width="300px" height="600px"></img> | <img src="myinfo_pkce_17_4.gif" alt="MyInfo flow (iOS 17.4+)" width="300px" height="600px"></img> |
 
 ## FAQ
 
@@ -227,6 +227,6 @@ Based on Apple's documentation:
 
 You can tell if the Singpass login page is opened in a external web browser by looking for the editable address bar. Below are 2 examples.
 
-| Safari Browser | Chrome Browser |     
+| Safari Browser | Chrome Browser |
 |----------------|----------------|
 | <img src="safari_browser.png" alt="Safari browser" width="300px" height="600px"></img> | <img src="chrome_browser.jpeg" alt="Chrome browser" width="300px" height="600px"></img> |

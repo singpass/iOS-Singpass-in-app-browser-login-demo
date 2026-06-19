@@ -1,0 +1,45 @@
+@startuml
+
+title FAPI2 Singpass Login
+
+participant "RP Mobile App" as app
+participant "RP Backend" as rp
+participant "Singpass\nOAuth Server" as sp
+
+note left of app: User clicks on\nLogin with Singpass
+
+app->rp: 1a) Request for request_uri and state
+
+note over rp: Generate PKCE code_verifier,\ncode_challenge, nonce\nCreate ephemeral DPoP keypair\nand DPoP token for PAR endpoint
+
+rp->sp: 1b) PAR request with code_challenge,\nnonce and DPoP token\n(PAR endpoint)
+
+sp->rp: 1c) request_uri and expires_in
+
+note over rp: Persist PKCE and DPoP\ndata to session store
+
+rp->app: 1d) request_uri and state
+
+group ASWebAuthenticationSession (AuthenticationServices)
+app->sp: 2a) Open authorization URL via ASWebAuthenticationSession\nwith client_id and request_uri
+
+note over sp: User does\n1fa and 2fa
+
+note over sp: User clicks on button\nin redirect/consent\npage or automatically\ngets redirected
+
+sp->app: 2b) Returns Authorization Code and state\n\niOS 17.4+: via ASWebAuthenticationSession\nHTTPS callback (.https(host:path:))\n\niOS < 17.4: via Universal Link →\nAppDelegate → WebSessionManager\n→ authSessionCallback
+end
+
+app->rp: 3a) Sends Authorization code,\nstate and redirectUri
+
+note over rp: Retrieve stored code_verifier\nCreate DPoP token for token endpoint
+
+rp->sp: 3b) Request for token with\ncode_verifier and DPoP token\n(token endpoint)
+
+sp->rp: 3c) Responds with token/s
+
+note over rp: Validate tokens and\nextract user identity
+
+rp->app: 3d) Respond with RP's\nsession token or data
+
+@enduml
